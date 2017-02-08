@@ -5,9 +5,19 @@
     tools:context="com.mitko.livedemonavigation.fragments.ListBooksFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/hello_blank_fragment" />
 
+    <ListView
+        android:id="@+id/lv_books"
+        android:layout_width="match_parent"
+        android:layout_height="463dp"
+        ></ListView>
+    </LinearLayout>
 </FrameLayout>
