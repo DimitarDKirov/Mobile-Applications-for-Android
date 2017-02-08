@@ -15,15 +15,17 @@ import android.widget.TextView;
 
 import com.mitko.livedemonavigation.R;
 import com.mitko.livedemonavigation.activities.BookDetailsActivity;
+import com.mitko.livedemonavigation.activities.BooksListActivity;
 import com.mitko.livedemonavigation.data.Data;
 import com.mitko.livedemonavigation.models.Book;
+import com.mitko.livedemonavigation.models.ICanNavigateActivity;
 
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListBooksFragment extends Fragment {
+public class ListBooksFragment extends Fragment{
     public static final String  BOOK_KEY= "book_key";
     private Data data;
 
@@ -61,14 +63,13 @@ public class ListBooksFragment extends Fragment {
         lvBooks.setAdapter(booksAdapter);
 
         lvBooks.setOnItemClickListener((parent, view, position, id) -> {
-            Intent intent = new Intent(this.getContext(), BookDetailsActivity.class);
-            Book book = books.get(position);
-            intent.putExtra(BOOK_KEY, book);
-            this.startActivity(intent);
+
+            //if activity != ICanNavigateActivity => Do Nothing
+            ICanNavigateActivity<Book> activity=(ICanNavigateActivity<Book>) this.getActivity();
+            activity.navigate(books.get(position));
         });
 
         // Inflate the layout for this fragment
         return root;
     }
-
 }

@@ -1,12 +1,16 @@
 package com.mitko.livedemonavigation.activities;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.mitko.livedemonavigation.R;
+import com.mitko.livedemonavigation.fragments.BookDetailsFragment;
 import com.mitko.livedemonavigation.models.Book;
+
+import java.io.Serializable;
 
 public class BookDetailsActivity extends AppCompatActivity {
     public static final String  BOOK_KEY= "book_key";
@@ -19,10 +23,15 @@ public class BookDetailsActivity extends AppCompatActivity {
         Intent intent=this.getIntent();
         Book book=(Book)intent.getSerializableExtra(BOOK_KEY);
 
-        TextView titleView=(TextView)this.findViewById(R.id.book_title);
-        titleView.setText(book.getTitle());
+        //вариант вграден fragment
+//        BookDetailsFragment fragment= (BookDetailsFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_book_details);
+//        fragment.setBook(book);
 
-        TextView isbnView=(TextView)this.findViewById(R.id.book_isbn);
-        isbnView.setText(book.getIsbn());
+        //вариант с динамично създден fragment
+        Fragment fragment=BookDetailsFragment.newInstance(book);
+        this.getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.container_fragment, fragment)
+                .commit();
     }
 }

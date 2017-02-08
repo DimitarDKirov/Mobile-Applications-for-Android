@@ -10,15 +10,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="horizontal"
     tools:context="com.mitko.livedemonavigation.activities.BookDetailsActivity">
-    <TextView
-        android:id="@+id/book_title"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        />
-    <TextView
-        android:id="@+id/book_isbn"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        />
 
+    <!--вариант вграден fragment-->
+    <!--<fragment-->
+        <!--android:id="@+id/fragment_book_details"-->
+        <!--android:name="com.mitko.livedemonavigation.fragments.BookDetailsFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--/>-->
+
+    <!--вариант с динамично създден fragment-->
+    <FrameLayout
+        android:id="@+id/container_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 </LinearLayout>

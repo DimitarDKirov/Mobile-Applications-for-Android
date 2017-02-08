@@ -2,6 +2,7 @@ package com.mitko.livedemonavigation.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,17 +21,22 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mitko.livedemonavigation.R;
 import com.mitko.livedemonavigation.data.Data;
+import com.mitko.livedemonavigation.fragments.BookDetailsFragment;
 import com.mitko.livedemonavigation.models.Book;
+import com.mitko.livedemonavigation.models.ICanNavigateActivity;
 
 import java.util.List;
 
-public class BooksListActivity extends AppCompatActivity {
+public class BooksListActivity extends AppCompatActivity implements ICanNavigateActivity<Book> {
     private static final String INTENT_EXTRA_KEY = "args_key";
+    boolean isPhoneView;
     private int count;
+    private BookDetailsFragment bookDetailsFragment;
 
     public BooksListActivity() {
         super();
         this.count=1;
+        this.isPhoneView=true;
     }
 
     @Override
@@ -47,7 +53,8 @@ public class BooksListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_book);
-    this.setupDrawer();
+
+            this.setupDrawer();
 //        Intent intent=this.getIntent();
 //        int count=intent.getIntExtra(INTENT_EXTRA_KEY, 1);
 //
@@ -61,6 +68,16 @@ public class BooksListActivity extends AppCompatActivity {
             initialIntent.putExtra(INTENT_EXTRA_KEY, this.count+1);
             this.startActivity(initialIntent);
         });
+
+        //за широки екрани
+        this.bookDetailsFragment=(BookDetailsFragment) this
+                .getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_book_details);
+
+        if(this.bookDetailsFragment!=null){
+            this.isPhoneView=false;
+        }
+
 //
 //        ListView lvBooks=(ListView)this.findViewById(R.id.lv_books);
 //        List<Book> books= this.data.getBooks();
@@ -112,5 +129,17 @@ public class BooksListActivity extends AppCompatActivity {
                         item1,
                         item2)
                 .build();
+    }
+
+    @Override
+    public void navigate(Book book){
+
+        if(this.isPhoneView){
+            Intent intent = new Intent(this, BookDetailsActivity.class);
+            intent.putExtra(BookDetailsActivity.BOOK_KEY, book);
+            this.startActivity(intent);
+        } else{
+            this.bookDetailsFragment.setBook(book);
+        }
     }
 }
