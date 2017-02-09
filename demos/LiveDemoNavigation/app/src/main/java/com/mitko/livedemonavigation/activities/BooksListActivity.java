@@ -54,7 +54,6 @@ public class BooksListActivity extends AppCompatActivity implements ICanNavigate
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_book);
 
-            this.setupDrawer();
 //        Intent intent=this.getIntent();
 //        int count=intent.getIntExtra(INTENT_EXTRA_KEY, 1);
 //
@@ -107,28 +106,6 @@ public class BooksListActivity extends AppCompatActivity implements ICanNavigate
 //            intent.putExtra(BookDetailsActivity.BOOK_KEY, book);
 //            this.startActivity(intent);
 //        });
-    }
-
-    private void setupDrawer() {
-        //https://github.com/mikepenz/MaterialDrawer
-
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem()
-                .withIdentifier(1)
-                .withName(R.string.drawer_item_home)
-                .withIcon(R.drawable.material_drawer_shadow_bottom);
-        SecondaryDrawerItem item2 = new SecondaryDrawerItem()
-                .withIdentifier(2)
-                .withName(R.string.drawer_item_settings)
-                .withIcon(R.drawable.material_drawer_badge);
-
-        Toolbar toolbar=(Toolbar)this.findViewById(R.id.toolbar_drawer);
-        Drawer result = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .addDrawerItems(
-                        item1,
-                        item2)
-                .build();
     }
 
     @Override
