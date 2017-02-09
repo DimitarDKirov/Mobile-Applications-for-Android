@@ -11,6 +11,11 @@
     android:orientation="horizontal"
     tools:context="com.mitko.livedemonavigation.activities.BookDetailsActivity">
 
+    <fragment
+        android:name="com.mitko.livedemonavigation.fragments.DrawerFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <!--вариант вграден fragment-->
     <!--<fragment-->
         <!--android:id="@+id/fragment_book_details"-->
