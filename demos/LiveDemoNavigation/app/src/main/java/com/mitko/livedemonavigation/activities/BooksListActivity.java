@@ -22,12 +22,15 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mitko.livedemonavigation.R;
 import com.mitko.livedemonavigation.data.Data;
 import com.mitko.livedemonavigation.fragments.BookDetailsFragment;
+import com.mitko.livedemonavigation.fragments.DrawerFragment;
 import com.mitko.livedemonavigation.models.Book;
+import com.mitko.livedemonavigation.models.DrawerItemInfo;
 import com.mitko.livedemonavigation.models.ICanNavigateActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class BooksListActivity extends AppCompatActivity implements ICanNavigateActivity<Book> {
+public class BooksListActivity extends BaseDrawerActivity implements ICanNavigateActivity<Book> {
     private static final String INTENT_EXTRA_KEY = "args_key";
     boolean isPhoneView;
     private int count;

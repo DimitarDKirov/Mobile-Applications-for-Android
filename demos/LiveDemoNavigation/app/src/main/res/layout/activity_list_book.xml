@@ -11,10 +11,15 @@
     android:orientation="vertical"
     tools:context="com.mitko.livedemonavigation.activities.BooksListActivity">
 
-    <fragment
-        android:name="com.mitko.livedemonavigation.fragments.DrawerFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <!--<fragment-->
+        <!--android:name="com.mitko.livedemonavigation.fragments.DrawerFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <FrameLayout
+        android:id="@+id/container_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </FrameLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

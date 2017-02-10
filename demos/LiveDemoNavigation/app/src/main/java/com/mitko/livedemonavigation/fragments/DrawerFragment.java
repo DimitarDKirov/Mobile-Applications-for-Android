@@ -15,19 +15,26 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mitko.livedemonavigation.R;
 import com.mitko.livedemonavigation.activities.TabsNavigationActivity;
+import com.mitko.livedemonavigation.models.DrawerItemInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DrawerFragment extends Fragment {
 
-    public static DrawerFragment createFragment(ArrayList<DrawerItemInfo> drawerItems){
+    private static final String ARG_DRAWER_ITEMS_KEY= "item-key";
+
+    private Drawer.OnDrawerItemClickListener onDrawerItemClickListener;
+
+    public static DrawerFragment createFragment(ArrayList<DrawerItemInfo> drawerItems, Drawer.OnDrawerItemClickListener onDrawerItemClickListener){
         DrawerFragment drawerFragment=new DrawerFragment();
+        drawerFragment.setOnDrawerItemClickListener(onDrawerItemClickListener);
         Bundle args=new Bundle();
-        args.putSerializable("drawerItems", drawerItems);
+        args.putSerializable(ARG_DRAWER_ITEMS_KEY, drawerItems);
         drawerFragment.setArguments(args);
         return drawerFragment;
     }
@@ -53,34 +60,43 @@ public class DrawerFragment extends Fragment {
         //https://github.com/mikepenz/MaterialDrawer
 
         Toolbar toolbar=(Toolbar)this.getView().findViewById(R.id.drawer_toolbar);
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem()
-                .withIdentifier(1)
-                .withName(R.string.drawer_item_home)
-                .withIcon(R.drawable.material_drawer_shadow_bottom);
-        SecondaryDrawerItem item2 = new SecondaryDrawerItem()
-                .withIdentifier(2)
-                .withName(R.string.drawer_item_tabs)
-                .withIcon(R.drawable.material_drawer_badge);
+        List<PrimaryDrawerItem> items=((ArrayList<DrawerItemInfo>) this.getArguments().getSerializable(ARG_DRAWER_ITEMS_KEY))
+                .stream()
+                .map(drawer_item_info->new PrimaryDrawerItem()
+                        .withIdentifier(drawer_item_info.getId())
+                        .withName(drawer_item_info.getTitle())
+                ).collect(Collectors.toList());
+
+//        PrimaryDrawerItem item1 = new PrimaryDrawerItem()
+//                .withIdentifier(1)
+//                .withName(R.string.drawer_item_home)
+//                .withIcon(R.drawable.material_drawer_shadow_bottom);
+//        SecondaryDrawerItem item2 = new SecondaryDrawerItem()
+//                .withIdentifier(2)
+//                .withName(R.string.drawer_item_tabs)
+//                .withIcon(R.drawable.material_drawer_badge);
 
         Drawer result = new DrawerBuilder()
                 .withActivity(this.getActivity())
                 .withToolbar(toolbar)
-                .addDrawerItems(
-                        item1,
-                        item2)
-                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    if(drawerItem.getIdentifier()==2){
-                        Intent intent=new Intent(this.getContext(), TabsNavigationActivity.class);
-                        this.startActivity(intent);
-                    }
-                    return true;
-                })
+                .withDrawerItems(new ArrayList<>(items))
+//                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+//                    if(drawerItem.getIdentifier()==2){
+//                        Intent intent=new Intent(this.getContext(), TabsNavigationActivity.class);
+//                        this.startActivity(intent);
+//                    }
+//                    return true;
+//                })
+                .withOnDrawerItemClickListener(this.onDrawerItemClickListener)
                 .build();
     }
 
-    public  class  DrawerItemInfo{
-        public  String title;
-        public int id;
+
+    public Drawer.OnDrawerItemClickListener getOnDrawerItemClickListener() {
+        return onDrawerItemClickListener;
     }
 
+    public void setOnDrawerItemClickListener(Drawer.OnDrawerItemClickListener onDrawerItemClickListener) {
+        this.onDrawerItemClickListener = onDrawerItemClickListener;
+    }
 }
