@@ -41,6 +41,26 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 adapter.add("GESTURE DETECTOR LONG PRESS");
                 super.onLongPress(e);
             }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                float xDiff=Math.abs(e1.getX()-e2.getX());
+                float yDiff=Math.abs(e1.getY()-e2.getY());
+                if(xDiff>yDiff){
+                    adapter.add("Fling left - right");
+                } else{
+                    adapter.add("Fling up - down");
+                }
+
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+        });
+
+        lv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return detector.onTouchEvent(event);
+            }
         });
     }
 

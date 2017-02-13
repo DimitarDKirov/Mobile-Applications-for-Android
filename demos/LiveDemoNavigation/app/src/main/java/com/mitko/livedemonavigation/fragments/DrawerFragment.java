@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,6 +31,7 @@ public class DrawerFragment extends Fragment {
     private static final String ARG_DRAWER_ITEMS_KEY= "item-key";
 
     private Drawer.OnDrawerItemClickListener onDrawerItemClickListener;
+    private GestureDetector detector;
 
     public static DrawerFragment createFragment(ArrayList<DrawerItemInfo> drawerItems, Drawer.OnDrawerItemClickListener onDrawerItemClickListener){
         DrawerFragment drawerFragment=new DrawerFragment();
@@ -89,6 +92,22 @@ public class DrawerFragment extends Fragment {
 //                })
                 .withOnDrawerItemClickListener(this.onDrawerItemClickListener)
                 .build();
+
+        detector=new GestureDetector(this.getContext(), new GestureDetector.SimpleOnGestureListener(){
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                float xDiff=Math.abs(e1.getX()-e2.getX());
+                float yDiff=Math.abs(e1.getY()-e2.getY());
+               if(e1.getX()<e2.getX()) {
+                   result.openDrawer();
+               }else{
+                   result.closeDrawer();
+               }
+
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+        });
     }
 
 
