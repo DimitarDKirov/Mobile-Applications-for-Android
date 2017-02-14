@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LiveHttpDemo</string>
+    <string name="title_activity_book_detailsd">BookDetailsdActivity</string>
 </resources>

@@ -13,7 +13,7 @@ let books = [
 ];
 
 app.get("/api/books", (req, res) => {
-    res.send(books);
+    setTimeout(()=>res.send(books), 1000);
 });
 app.get("/api/books/:id", (req, res) => {
     res.send(books[req.params.id - 1]);
