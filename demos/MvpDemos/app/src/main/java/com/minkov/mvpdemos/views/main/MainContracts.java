@@ -1,32 +1,36 @@
 package com.minkov.mvpdemos.views.main;
 
-import com.minkov.mvpdemos.Mvp;
-import com.minkov.mvpdemos.models.Superhero;
+import com.minkov.mvpdemos.ui.ModalFactory;
+import com.minkov.mvpdemos.ui.Notifier;
 
 /**
- * Created by minkov on 2/12/17.
+ * Created by minkov on 2/15/17.
  */
 
 public class MainContracts {
+    public interface View {
+        void setNames(String[] items);
 
-    public interface View extends Mvp.BaseView<MainContracts.Presenter> {
+        void notifyText(String text);
+
         void setPresenter(MainContracts.Presenter presenter);
 
-        void notify(String text);
+        void navigateWith(String name);
 
-        void setItems(String[] items);
+        void showAddView();
 
-        void navigateWith(Superhero superhero);
+        void setModalFactory(ModalFactory modalFactory);
+
+        void setNotifier(Notifier notifier);
     }
 
     public interface Presenter {
-
         void start();
 
         MainContracts.View getView();
 
-        void saveSuperhero(String name);
+        void selectName(int index);
 
-        void selectItem(int position);
+        void add();
     }
 }

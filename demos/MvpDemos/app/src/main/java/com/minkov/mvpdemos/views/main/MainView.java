@@ -3,57 +3,61 @@ package com.minkov.mvpdemos.views.main;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.minkov.mvpdemos.models.Superhero;
+import com.minkov.mvpdemos.R;
 import com.minkov.mvpdemos.ui.ModalFactory;
+import com.minkov.mvpdemos.ui.Notifier;
 import com.minkov.mvpdemos.views.details.DetailsActivity;
-import com.minkov.mvpexplore2.R;
-import com.minkov.mvpdemos.views.base.BaseViewFragment;
 
-import javax.inject.Inject;
-
-import io.reactivex.functions.Consumer;
-
-public class MainView extends BaseViewFragment
-        implements MainContracts.View,
-        View.OnClickListener,
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class MainView
+        extends Fragment
+        implements
+        MainContracts.View,
         AdapterView.OnItemClickListener,
-        ModalFactory.OnClickCallback<Superhero> {
-
+        View.OnClickListener,
+        ModalFactory.ModalFactoryPositiveHandler {
     private MainContracts.Presenter presenter;
-    private ListView lvItems;
+
+    private ListView lvNames;
     private ArrayAdapter<String> adapter;
     private FloatingActionButton btnAdd;
-    private Dialog modalAdd;
 
-    @Inject
+    private ModalFactory modalFactory;
+    private Notifier notifier;
+
     public MainView() {
-        //empty constructor
+        // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main_view, container, false);
+
+        //Prepare views
+
+        this.adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1);
+        this.lvNames = (ListView) root.findViewById(R.id.lvNames);
+        this.lvNames.setAdapter(this.adapter);
+        this.lvNames.setOnItemClickListener(this);
+
 
         this.btnAdd = (FloatingActionButton) root.findViewById(R.id.btnAdd);
         this.btnAdd.setOnClickListener(this);
 
-        this.modalAdd = this.getModalFactory()
-                .getAddSuperheroModal(this.getContext(), this);
-
-        this.adapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_list_item_1);
-        this.lvItems = (ListView) root.findViewById(R.id.lvSuperheroes);
-        this.lvItems.setAdapter(this.adapter);
-        this.lvItems.setOnItemClickListener(this);
-
+        //  Start the presenter
         this.presenter.start();
 
         return root;
@@ -65,43 +69,58 @@ public class MainView extends BaseViewFragment
     }
 
     @Override
-    public void setItems(final String[] names) {
-        this.getUIOperationsHandler()
-                .perform()
-                .subscribe(new Consumer() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        adapter.clear();
-                        adapter.addAll(names);
-                    }
-                });
-    }
-
-    @Override
-    public void navigateWith(Superhero superhero) {
+    public void navigateWith(String name) {
         Intent intent = new Intent(this.getContext(), DetailsActivity.class);
-        intent.putExtra("sh", superhero);
-        this.startActivity(intent);
+        intent.putExtra("details", name);
+        startActivity(intent);
     }
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btnAdd) {
-            this.showAddView();
-        }
+    public void showAddView() {
+        Dialog addModal =
+                this.modalFactory.
+                        getAddNameModal(this.getContext(), this);
+        addModal.show();
     }
 
-    private void showAddView() {
-        this.modalAdd.show();
-    }
-
-    @Override
-    public void onClick(Superhero superhero) {
-        this.presenter.saveSuperhero(superhero.getName());
+    public static MainView create() {
+        return new MainView();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        this.presenter.selectItem(position);
+        this.presenter.selectName(position);
     }
+
+    public void setNames(String[] names) {
+        this.adapter.clear();
+        this.adapter.addAll(names);
+    }
+
+    public void notifyText(String text) {
+        this.notifier.notifySuccess(this.getContext(), text);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnAdd:
+                this.presenter.add();
+                break;
+        }
+    }
+
+    public void setModalFactory(ModalFactory modalFactory) {
+        this.modalFactory = modalFactory;
+    }
+
+    public void setNotifier(Notifier notifier) {
+        this.notifier = notifier;
+    }
+
+    @Override
+    public void onPositive() {
+        this.notifier.notifySuccess(this.getContext(), "Agreed!");
+    }
+
 }

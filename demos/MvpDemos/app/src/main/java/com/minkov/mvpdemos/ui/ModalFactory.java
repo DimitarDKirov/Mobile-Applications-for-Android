@@ -3,45 +3,57 @@ package com.minkov.mvpdemos.ui;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.EditText;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.minkov.mvpexplore2.R;
-import com.minkov.mvpdemos.models.Superhero;
-
-import javax.inject.Inject;
-
-/**
- * Created by minkov on 2/13/17.
- */
+import com.minkov.mvpdemos.R;
 
 public class ModalFactory {
-    @Inject
-    public ModalFactory() {
-
+    public Dialog getAddNameModal(Context context, ModalFactoryPositiveHandler onPositiveHandler) {
+        return this.getAddNameModal(context, onPositiveHandler, null);
     }
 
-    public Dialog getAddSuperheroModal(Context context, final ModalFactory.OnClickCallback callback) {
+    public Dialog getAddNameModal(Context context, ModalFactoryNegativeHandler onNegativeHandler) {
+        return this.getAddNameModal(context, null, onNegativeHandler);
+    }
+
+    public Dialog getAddNameModal(Context context) {
+        return this.getAddNameModal(context, null, null);
+    }
+
+    public Dialog getAddNameModal(Context context, final ModalFactoryPositiveHandler onPositiveHandler, final ModalFactoryNegativeHandler onNegativeHandler) {
         return new MaterialDialog.Builder(context)
-                .title(R.string.model_add_title)
-                .customView(R.layout.modal_add, true)
-                .positiveText(R.string.agree)
-                .negativeText(R.string.disagree)
+                .title("Add")
+                .content("Are you sure?")
+                .positiveText("Yes")
+                .negativeText("No")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String name = ((EditText) dialog.findViewById(R.id.etName))
-                                .getText()
-                                .toString();
-                        Superhero superhero = new Superhero(null, name);
-                        callback.onClick(superhero);
+                        if (onPositiveHandler == null) {
+                            return;
+                        }
+
+                        onPositiveHandler.onPositive();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (onNegativeHandler == null) {
+                            return;
+                        }
+                        onNegativeHandler.onNegative();
                     }
                 })
                 .build();
     }
 
-    public interface OnClickCallback<T> {
-        void onClick(T result);
+    public interface ModalFactoryPositiveHandler {
+        void onPositive();
+    }
+
+    public interface ModalFactoryNegativeHandler {
+        void onNegative();
     }
 }
