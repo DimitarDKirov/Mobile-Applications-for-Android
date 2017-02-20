@@ -31,6 +31,8 @@ import mitko.liveworkshopui.tabs.AboutFragment;
 import mitko.liveworkshopui.tabs.FractionsFragment;
 import mitko.liveworkshopui.tabs.SearchFragment;
 import mitko.liveworkshopui.tabs.SuperheroesListFragment;
+import mitko.liveworkshopui.tasks.HttpAsyncTask;
+import mitko.liveworkshopui.tasks.HttpPostAsyncTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        final Context context=this;
+        final Context context = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MaterialDialog dialog=new MaterialDialog.Builder(context)
+                MaterialDialog dialog = new MaterialDialog.Builder(context)
                         .title("Add superhero")
                         .customView(R.layout.modal_add, true)
                         .positiveText("Save")
@@ -80,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                View modal=dialog.getCustomView();
+                                View modal = dialog.getCustomView();
 
-                                String name=((EditText)modal.findViewById(R.id.etSuperheroName)).getText().toString();
-                                String secretIdentity=((EditText)modal.findViewById(R.id.etSuperheroIdentity)).getText().toString();
+                                String name = ((EditText) modal.findViewById(R.id.etSuperheroName)).getText().toString();
+                                String secretIdentity = ((EditText) modal.findViewById(R.id.etSuperheroIdentity)).getText().toString();
 
-                                Superhero superhero=new Superhero(name, secretIdentity);
+                                Superhero superhero = new Superhero(name, secretIdentity);
                                 createSuperhero(superhero);
                             }
                         })
@@ -97,7 +99,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createSuperhero(Superhero superhero) {
-
+        String url = ((SuperheroesApplication) this.getApplication()).getApiBasUrl() + "superheroes";
+        final Context context = this;
+        new HttpPostAsyncTask<Superhero>(superhero, Superhero.class, new HttpAsyncTask.OnDataReady<Superhero>() {
+            @Override
+            public void onReady(Superhero data) {
+                Toast.makeText(context, "Created!", Toast.LENGTH_SHORT).show();
+            }
+        }).execute(url);
     }
 
 
@@ -123,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -136,13 +144,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-           switch (position){
-               case 0: return new SuperheroesListFragment();
-               case 1:return new FractionsFragment();
-               case 2:return  new SearchFragment();
-               case 3:return new AboutFragment();
-               default:return null;
-           }
+            switch (position) {
+                case 0:
+                    return new SuperheroesListFragment();
+                case 1:
+                    return new FractionsFragment();
+                case 2:
+                    return new SearchFragment();
+                case 3:
+                    return new AboutFragment();
+                default:
+                    return null;
+            }
         }
 
         @Override

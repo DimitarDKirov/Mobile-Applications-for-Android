@@ -42,7 +42,7 @@ public class SuperheroesListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate  the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_superheroes_list, container, false);
-        this.apiUrl=((SuperheroesApplication) this.getActivity().getApplication()).getApiBasUrl()+"books";
+        this.apiUrl=((SuperheroesApplication) this.getActivity().getApplication()).getApiBasUrl()+"superheroes";
 
         this.superheroes = ((SuperheroesApplication) this.getActivity().getApplication()).getSuperheroes();
         this.superheroesAdapter = new SuperheroesAdapter(this.getContext(), this.superheroes);
@@ -71,6 +71,7 @@ public class SuperheroesListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        superheroesAdapter.clear();
                         superheroesAdapter.addAll(new ArrayList<>(Arrays.asList(items)));
                         loadingFragment.hide();
                     }

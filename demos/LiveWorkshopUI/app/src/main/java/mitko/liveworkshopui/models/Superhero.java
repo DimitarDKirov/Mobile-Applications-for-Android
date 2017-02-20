@@ -5,15 +5,15 @@ package mitko.liveworkshopui.models;
  */
 public class Superhero {
     private String name;
-    private  String identity;
+    private  String secretIdentity;
 
     public Superhero(String name, String identity) {
         this.name = name;
-        this.identity = identity;
+        this.secretIdentity = identity;
     }
 
-    public String getIdentity() {
-        return identity;
+    public String getSecretIdentity() {
+        return secretIdentity;
     }
 
     public String getName() {
