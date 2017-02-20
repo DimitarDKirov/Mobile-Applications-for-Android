@@ -36,7 +36,7 @@ public class SuperheroesAdapter extends ArrayAdapter<Superhero>{
 
         Superhero superhero=this.getItem(position);
         ((TextView)view.findViewById(R.id.tvSuperheroName)).setText(superhero.getName());
-        ((TextView)view.findViewById(R.id.tvSuperheroIdentity)).setText(superhero.getName());
+        ((TextView)view.findViewById(R.id.tvSuperheroIdentity)).setText(superhero.getSecretIdentity());
         return view;
     }
 }
