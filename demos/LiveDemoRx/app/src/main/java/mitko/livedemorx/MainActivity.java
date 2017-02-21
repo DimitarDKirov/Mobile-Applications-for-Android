@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -50,25 +51,28 @@ public class MainActivity extends AppCompatActivity {
         data.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(superheroes -> {
-                    adapter.clear();
-                    adapter.addAll(superheroes);
+                .subscribe(new Consumer<Superhero[]>() {
+                    @Override
+                    public void accept(Superhero[] superheros) throws Exception {
+                        adapter.clear();
+                        adapter.addAll(superheros);
+                    }
                 });
     }
 
-    io.reactivex.Observable<Date> getObservable() {
-
-        return io.reactivex.Observable.create(new ObservableOnSubscribe<Date>() {
-
-            @Override
-            public void subscribe(ObservableEmitter<Date> e) throws Exception {
-                while (true) {
-                    SystemClock.sleep(1000);
-                    e.onNext(new Date());
-                }
-            }
-        });
-    }
+//    io.reactivex.Observable<Date> getObservable() {
+//
+//        return io.reactivex.Observable.create(new ObservableOnSubscribe<Date>() {
+//
+//            @Override
+//            public void subscribe(ObservableEmitter<Date> e) throws Exception {
+//                while (true) {
+//                    SystemClock.sleep(1000);
+//                    e.onNext(new Date());
+//                }
+//            }
+//        });
+//    }
 
     public class ImageTextArrayAdapter extends ArrayAdapter<Superhero> {
 
@@ -85,8 +89,26 @@ public class MainActivity extends AppCompatActivity {
             if (view == null) {
                 view = getLayoutInflater().inflate(R.layout.irem_superhero, parent, false);
             }
+
             ((TextView) view.findViewById(R.id.tvName)).setText(superhero.getName());
+            ImageView iv = (ImageView) view.findViewById(R.id.iv);
+            this.SetImageToImageView(iv, superhero.getImgUrl());
+
             return view;
+        }
+
+        void SetImageToImageView(ImageView iv, String imgUrl) {
+            if (imgUrl == null) {
+                return;
+            }
+
+            ImagesData imageData = new ImagesData();
+            imageData.getImage(imgUrl)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(bitmap -> {
+                        iv.setImageBitmap(bitmap);
+                    });
         }
     }
 }

@@ -1,6 +1,7 @@
 /* globals module */
 
 const props = ["name", "secretIdentity", "imgUrl", "story", "factions", "powers", "_id"];
+const defaultImageUrl="https://www.fjackets.com/product_images/uploaded_images/superhero-costumes-for-men.jpg";
 
 class Superhero {
     constructor(name, secretIdentity, imgUrl, story, factions, powers, id = null) {
@@ -8,7 +9,7 @@ class Superhero {
         this.secretIdentity = secretIdentity;
         this.story = story;
         this.factions = factions;
-        this.imgUrl = imgUrl;
+        this.imgUrl = imgUrl || defaultImageUrl;
         this.powers = powers;
         this.id = id;
     }
