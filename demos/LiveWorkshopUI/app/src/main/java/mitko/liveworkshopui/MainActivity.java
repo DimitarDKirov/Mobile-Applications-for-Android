@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return "FRACTIONS";
                 case 2:
-                    return "SEARTH";
+                    return "SEARCH";
                 case 3:
                     return "ABOUT";
             }

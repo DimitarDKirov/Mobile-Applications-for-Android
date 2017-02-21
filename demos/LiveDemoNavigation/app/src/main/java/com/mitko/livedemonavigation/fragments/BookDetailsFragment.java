@@ -23,11 +23,11 @@ public class BookDetailsFragment extends Fragment {
     }
 
     public static BookDetailsFragment newInstance(Book book) {
-        Bundle bundle=new Bundle();
-        bundle.putSerializable(BOOK_KEY,book);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(BOOK_KEY, book);
 
         BookDetailsFragment fragment = new BookDetailsFragment();
-fragment.setArguments(bundle);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -35,17 +35,17 @@ fragment.setArguments(bundle);
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root=inflater.inflate(R.layout.fragment_book_details, container, false);
+        View root = inflater.inflate(R.layout.fragment_book_details, container, false);
 
         //вариант с динамично създден fragment
-        Bundle arguments=this.getArguments();
-        Serializable book=null;
-        if(arguments!=null){
-           book= arguments.getSerializable(BOOK_KEY);
+        Bundle arguments = this.getArguments();
+        Serializable book = null;
+        if (arguments != null) {
+            book = arguments.getSerializable(BOOK_KEY);
         }
 
-        if(book!=null){
-            this.setBook((Book)book, root);
+        if (book != null) {
+            this.setBook((Book) book, root);
         }
 
         return root;
@@ -56,12 +56,12 @@ fragment.setArguments(bundle);
         this.setBook(book, this.getView());
     }
 
-    protected void setBook(Book book, View view){
-        this.book=book;
-        TextView titleView=(TextView)view.findViewById(R.id.book_title);
+    protected void setBook(Book book, View view) {
+        this.book = book;
+        TextView titleView = (TextView) view.findViewById(R.id.book_title);
         titleView.setText(book.getTitle());
 
-        TextView isbnView=(TextView)view.findViewById(R.id.book_isbn);
+        TextView isbnView = (TextView) view.findViewById(R.id.book_isbn);
         isbnView.setText(book.getIsbn());
     }
 }
