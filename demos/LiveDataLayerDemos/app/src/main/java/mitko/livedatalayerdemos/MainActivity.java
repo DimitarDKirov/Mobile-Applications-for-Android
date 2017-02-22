@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String url = "http://10.82.200.82:3001/superheroes";
+        String url = "http://192.168.0.104:3001/superheroes";
         final IData<Superhero> data = new HttpData<>(url, Superhero.class, Superhero[].class);
         final MainActivity activity = this;
         data.add(new Superhero("", "Thor", "Thor Odisson", "http://static.srcdn.com/wp-content/uploads/thor-3-ragnarok-chris-hemsworth.jpg"))

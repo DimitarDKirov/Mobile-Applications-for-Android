@@ -18,7 +18,8 @@
         </activity>
 
         <meta-data android:name="DATABASE" android:value="superheroesDb.db" />
-        <meta-data android:name="VERSION" android:value="3" />
+        <!--Изключва се instant run и сменя Version-->
+        <meta-data android:name="VERSION" android:value="5" />
         <meta-data android:name="QUERY_LOG" android:value="true" />
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.minkov" />
     </application>

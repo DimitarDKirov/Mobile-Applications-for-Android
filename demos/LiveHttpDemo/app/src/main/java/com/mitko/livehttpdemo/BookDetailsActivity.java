@@ -33,7 +33,7 @@ public class BookDetailsActivity extends AppCompatActivity {
             public void call(Book book) {
                 tvTitle.setText(book.title);
             }
-        }).execute("http://10.82.200.82:3001/api/books/"+book.id);
+        }).execute("http://192.168.0.104:3001/api/books/"+book.id);
     }
 
     class PerformHttpAsyncTask extends AsyncTask<String,String,String> {

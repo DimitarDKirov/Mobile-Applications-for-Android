@@ -15,8 +15,8 @@ import okhttp3.Response;
  */
 
 public class SuperheroesData {
-//    private String ulr = "http://192.168.0.104:3001/superheroes";
-    private String ulr = "http://10.82.200.82:3001/superheroes";
+   private String ulr = "http://192.168.0.104:3001/superheroes";
+//    private String ulr = "http://10.82.200.82:3001/superheroes";
 
     Observable<Superhero[]> getAll() {
         return Observable.create(e -> {

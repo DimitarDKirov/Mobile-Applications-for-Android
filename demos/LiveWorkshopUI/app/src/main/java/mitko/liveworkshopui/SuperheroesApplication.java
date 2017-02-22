@@ -10,8 +10,8 @@ import mitko.liveworkshopui.models.Superhero;
  * Created by dimki on 18.02.2017 г..
  */
 public class SuperheroesApplication extends Application {
-//    private static final String API_BASE_URL = "http://192.168.0.104:3001/api/";
-    private static final String API_BASE_URL = "http://10.82.200.82:3001/";
+    private static final String API_BASE_URL = "http://192.168.0.104:3001/";
+    //private static final String API_BASE_URL = "http://10.82.200.82:3001/";
     private ArrayList<Superhero> superheroes;
 
     public SuperheroesApplication() {
