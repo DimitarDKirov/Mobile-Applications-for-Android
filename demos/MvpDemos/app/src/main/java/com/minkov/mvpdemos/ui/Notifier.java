@@ -12,11 +12,15 @@ import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 
 public class Notifier {
     public void notifySuccess(Context context, String text) {
+        //Library
         SuperActivityToast.create(context, new Style(), Style.TYPE_BUTTON)
                 .setText(text)
                 .setDuration(Style.DURATION_SHORT)
                 .setFrame(Style.FRAME_LOLLIPOP)
                 .setAnimations(Style.ANIMATIONS_POP)
                 .show();
+
+        //Andriod default
+       // Toast.makeText(context, text,Toast.LENGTH_SHORT).show();
     }
 }
