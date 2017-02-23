@@ -56,6 +56,7 @@ public class NotificationsFactory {
         Observable
                 .create(new ObservableOnSubscribe<Integer>() {
                     @Override
+                    //за да се симулира прогрес
                     public void subscribe(ObservableEmitter<Integer> e) throws Exception {
                         int count = 100;
                         for (int i = 1; i <= count; i += 3) {
