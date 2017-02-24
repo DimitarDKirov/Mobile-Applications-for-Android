@@ -6,20 +6,20 @@ module.exports = function (data) {
     return {
         loginLocal(req, res, next) {
             const auth = passport.authenticate('local', function (error, user) {
-                if(error) {
+                if (error) {
                     next(error);
                     return;
                 }
 
-                if(!user) {
-                    res.json({ 
+                if (!user) {
+                    res.json({
                         success: false,
                         message: 'Invalid name or password!'
                     });
                 }
 
                 req.login(user, error => {
-                    if(error) {
+                    if (error) {
                         next(error);
                         return;
                     }
@@ -41,12 +41,15 @@ module.exports = function (data) {
             const user = {
                 username: req.body.username,
                 password: req.body.password,
-                roles: req.body.roles
+                phone: req.body.phone
             };
-            
+
             data.createUser(user)
                 .then(dbUser => {
-                    res.status(201).json(dbUser);
+                    res.status(201).json({
+                        success: true,
+                        message: `User ${dbUser.username} registered`
+                    });
                 })
                 .catch(error => res.status(500).json(error));
         }

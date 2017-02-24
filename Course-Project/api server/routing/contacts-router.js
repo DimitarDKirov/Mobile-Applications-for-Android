@@ -1,18 +1,22 @@
 'use strict';
 
 const router = require('express').Router(),
-    createAuthController = require('../controller/auth-controller'),
-        data = require('../data'),
-    passport = require('passport');
+    createPastesController = require('../controller/pastes-controller'),
+    data = require('../data'),
+    auth = require('../middlewares/auth-middleware'),
+    dataMiddleware = require('../middlewares/data-middlewares');
 
-const authController = createAuthController(data);
-
-
+const pastesController = createPastesController(data);
 
 module.exports = app => {
     router
-        .post('/login', authController.loginLocal)
-        .post('/register', authController.register);
+        .get('/api/pastes', pastesController.getPastes)
+        .post('/api/pastes', pastesController.createPaste)
+        .get('/api/pastes/:pasteId', dataMiddleware.pasteById, pastesController.pasteById)
+        .put('/api/pastes/:pasteId', auth.isInRole('admin'), pastesController.updatePaste)
+        .delete('/api/pastes/:pasteId', auth.isInRole('admin'), pastesController.removePaste)
+        .post('/api/pastes/:pasteId/comments', auth.isAuthenticated, dataMiddleware.pasteById, pastesController.createComment)
+
 
     app.use(router);
-};
+}

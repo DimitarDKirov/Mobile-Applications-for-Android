@@ -10,7 +10,7 @@ function comparePassword(requestPassword, user) {
 module.exports = function (passport, data) {
     const authStrategy = new LocalStrategy(
         function (username, password, done) {
-            data.findByUsername(username)
+            data.findUserByUsername(username)
                 .then(user => {
                     if (user && comparePassword(password, user)) {
                         done(null, user);

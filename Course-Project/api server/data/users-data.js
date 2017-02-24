@@ -1,10 +1,12 @@
+const hashing = require('../utils/hashing');
+
 module.exports = function (models) {
     let User = models.User;
     return {
-        findById(id) {
+        findUserById(id) {
             return User.findById(id);
         },
-        findByUsername(username) {
+        findUserByUsername(username) {
             return User.findOne({ username });
         },
         createUser(user) {
@@ -15,7 +17,7 @@ module.exports = function (models) {
 
             const newUser = {
                 username: user.username,
-                roles: user.roles,
+                phone: user.phone,
                 salt,
                 passHash
             };
