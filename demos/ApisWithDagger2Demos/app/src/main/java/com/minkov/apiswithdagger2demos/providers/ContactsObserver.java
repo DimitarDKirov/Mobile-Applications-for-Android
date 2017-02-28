@@ -47,6 +47,11 @@ public class ContactsObserver {
     }
 
     public Observable<ContactInfo> insertContact(final String name) {
+        if (ActivityCompat.checkSelfPermission(activityContext, Manifest.permission.WRITE_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activityContext, new String[]{Manifest.permission.WRITE_CONTACTS}, 0);
+        }
+
         return Observable.create(new ObservableOnSubscribe<ContactInfo>() {
             @Override
             public void subscribe(ObservableEmitter<ContactInfo> e) throws Exception {

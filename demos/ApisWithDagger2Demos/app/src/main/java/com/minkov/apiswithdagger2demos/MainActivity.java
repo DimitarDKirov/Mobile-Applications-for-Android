@@ -1,16 +1,22 @@
 package com.minkov.apiswithdagger2demos;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.minkov.apiswithdagger2demos.providers.ContactsObserver;
 import com.minkov.apiswithdagger2demos.providers.LocationObserver;
@@ -23,14 +29,21 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Manifest;
 
 import javax.inject.Inject;
 
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 public class MainActivity extends AppCompatActivity
-        implements Consumer<Object>, EasyImage.Callbacks {
+        implements Consumer<Object>, EasyImage.Callbacks
+       // , LocationListener
+{
     @Inject
     public LocationObserver locationObserver;
 
@@ -49,6 +62,22 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        LocationManager manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+//                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+//        }
+//        if(manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+//        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1,1,this);
+//        }
+//        else if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+//        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1,1,this);
+//        }
+//        else{
+//            Toast.makeText(this, "no provider is available", Toast.LENGTH_SHORT).show();
+//        }
+
+
         this.tvLatitude = (TextView) this.findViewById(R.id.tvLatitude);
         this.tvLongitude = (TextView) this.findViewById(R.id.tvLongitude);
         this.tvAltitude = (TextView) this.findViewById(R.id.tvAltitude);
@@ -61,30 +90,30 @@ public class MainActivity extends AppCompatActivity
 
         this.inject();
 
-//        this.locationObserver.setActivityContext(this);
+        this.locationObserver.setActivityContext(this);
 
-//        this.locationObserver.getLocationObserver()
-//                .observeOn(Schedulers.io())
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .subscribe(this);
+        this.locationObserver.getLocationObserver()
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(this);
 
-//        this.contactsObserver.setActivityContext(this);
-//
-//        this.contactsObserver.insertContact("John")
-//                .switchMap(new Function<ContactsObserver.ContactInfo, ObservableSource<?>>() {
-//                    @Override
-//                    public ObservableSource<?> apply(ContactsObserver.ContactInfo contactInfo) throws Exception {
-//                        return contactsObserver.getContacts();
-//                    }
-//                })
-//                .observeOn(Schedulers.io())
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .subscribe(MainActivity.this);
+        this.contactsObserver.setActivityContext(this);
+
+        this.contactsObserver.insertContact("John")
+                .switchMap(new Function<ContactsObserver.ContactInfo, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(ContactsObserver.ContactInfo contactInfo) throws Exception {
+                        return contactsObserver.getContacts();
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(MainActivity.this);
 
         EasyImage.Configuration config = EasyImage.configuration(this)
                 .saveInAppExternalFilesDir();
 
-        EasyImage.openCamera(this, EasyImage.REQ_SOURCE_CHOOSER);
+     //   EasyImage.openCamera(this, EasyImage.REQ_SOURCE_CHOOSER);
     }
 
     private void inject() {
